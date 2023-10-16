@@ -1,62 +1,118 @@
 import * as React from "react"
-import { CssVarsProvider, useColorScheme } from "@mui/joy/styles"
+import { CssVarsProvider } from "@mui/joy/styles"
 import GlobalStyles from "@mui/joy/GlobalStyles"
 import CssBaseline from "@mui/joy/CssBaseline"
 import Box from "@mui/joy/Box"
 import Button from "@mui/joy/Button"
-import FormControl from "@mui/joy/FormControl"
-import FormLabel, { formLabelClasses } from "@mui/joy/FormLabel"
+import { formLabelClasses } from "@mui/joy/FormLabel"
 import IconButton from "@mui/joy/IconButton"
 import Link from "@mui/joy/Link"
-import Input from "@mui/joy/Input"
 import Typography from "@mui/joy/Typography"
 import Stack from "@mui/joy/Stack"
 import BadgeRoundedIcon from "@mui/icons-material/BadgeRounded"
 import ColorSchemeToggle from "../components/shared/ColorSchemeToggle"
+import { useDispatch, useSelector } from "react-redux"
+import ControlledTextField from "../components/inputs/ControlledTextField"
+import { useForm } from "react-hook-form"
 
+const LoginForm = ({ control }: { control: any }) => {
+  return (
+    <>
+      <ControlledTextField
+        type="email"
+        label="Email"
+        name="auth.email"
+        control={control}
+        required
+      />
+      <ControlledTextField
+        type="password"
+        label="Password"
+        name="auth.password"
+        control={control}
+        required
+      />
+    </>
+  )
+}
+
+const SignUpForm = ({ control }: { control: any }) => {
+  return (
+    <>
+      <ControlledTextField
+        label="First Name"
+        name="auth.first_name"
+        control={control}
+        required
+      />
+
+      <ControlledTextField
+        label="Last Name"
+        name="auth.last_name"
+        control={control}
+        required
+      />
+      <ControlledTextField
+        type="email"
+        label="Email"
+        name="auth.email"
+        control={control}
+        required
+      />
+      <ControlledTextField
+        type="password"
+        label="Password"
+        name="auth.password"
+        control={control}
+        required
+      />
+      <ControlledTextField
+        type="password"
+        label="Confirm Password"
+        name="auth.confirm_password"
+        control={control}
+        required
+      />
+    </>
+  )
+}
+
+interface IAuthForm {
+  auth: {
+    email: string
+    password: string
+  }
+}
 const AuthForm = ({ mode }: { mode: string }) => {
+  // const isEditable = useSelector(isEditableState)
+  // const dispatch = useDispatch()
+  const { handleSubmit, control } = useForm<IAuthForm>({
+    defaultValues: {
+      auth: {},
+    },
+  })
+
+  const onSubmit = ({ auth }: IAuthForm) => {
+    console.log(auth)
+  }
   return (
     <Stack gap={4} sx={{ mt: 2 }}>
-      <form
-        onSubmit={(event: React.FormEvent<SignInFormElement>) => {
-          event.preventDefault()
-          const formElements = event.currentTarget.elements
-          const data = {
-            email: formElements.email.value,
-            password: formElements.password.value,
-          }
-          alert(JSON.stringify(data, null, 2))
-        }}
-      >
-        <FormControl required>
-          <FormLabel>Email</FormLabel>
-          <Input type="email" name="email" />
-        </FormControl>
-        <FormControl required>
-          <FormLabel>Password</FormLabel>
-          <Input type="password" name="password" />
-        </FormControl>
-        <Stack gap={4} sx={{ mt: 2 }}>
-          <Button type="submit" fullWidth>
-            {mode == "signin" ? "Sign In" : "Log In"}
-          </Button>
-        </Stack>
-      </form>
+      <Stack gap={4} sx={{ mt: 2 }}>
+        {mode === "signin" ? (
+          <SignUpForm control={control} />
+        ) : (
+          <LoginForm control={control} />
+        )}
+        <Button type="submit" fullWidth onClick={handleSubmit(onSubmit)}>
+          {mode == "signin" ? "Sign In" : "Log In"}
+        </Button>
+      </Stack>
     </Stack>
   )
 }
 
-interface FormElements extends HTMLFormControlsCollection {
-  email: HTMLInputElement
-  password: HTMLInputElement
-  persistent: HTMLInputElement
-}
-interface SignInFormElement extends HTMLFormElement {
-  readonly elements: FormElements
-}
-
 export default function Login() {
-  const [mode, setMode] = React.useState("signin")
+  const [mode, setMode] = React.useState("login")
   const switchMode = () => {
     if (mode == "signin") {
       setMode("login")
@@ -73,7 +129,7 @@ export default function Login() {
             "--Collapsed-breakpoint": "769px", // form will stretch when viewport is below `769px`
             "--Cover-width": "50vw", // must be `vw` only
             "--Form-maxWidth": "800px",
-            "--Transition-duration": "0.4s", // set to `none` to disable transition
+            "--Transition-duration": "0.4s", // set to `n∆one` to disable transition
           },
         }}
       />
@@ -124,7 +180,7 @@ export default function Login() {
               <IconButton variant="soft" color="primary" size="sm">
                 <BadgeRoundedIcon />
               </IconButton>
-              <Typography level="title-lg">Customizable CRM</Typography>
+              <Typography level="title-lg">Customizable</Typography>
             </Box>
             <ColorSchemeToggle />
           </Box>
@@ -154,28 +210,29 @@ export default function Login() {
             <Stack gap={4} sx={{ mb: 2 }}>
               <Stack gap={1}>
                 <Typography level="h3">
-                  {mode == "signin" ? "Sign In" : "Log In"}
+                  {mode === "signin" ? "Log In" : "Sign Up"}
                 </Typography>
               </Stack>
             </Stack>
 
             <AuthForm mode={mode} />
+
             <Stack gap={4} sx={{ mb: 2 }}>
               <Stack gap={1} direction="row">
                 <Typography level="body-sm">
                   {mode === "signin"
-                    ? "Don't have an account?"
-                    : "Already have an account?"}
+                    ? "Already have an account?"
+                    : "Don't have an account?"}
                 </Typography>
                 <Link href="#" level="title-sm" onClick={() => switchMode()}>
-                  {mode === "signin" ? "Sign Up" : "Log In"}
+                  {mode === "signin" ? "Log In" : "Sign Up"}
                 </Link>
               </Stack>
             </Stack>
           </Box>
           <Box component="footer" sx={{ py: 3 }}>
             <Typography level="body-xs" textAlign="center">
-              © Customizable CRM {new Date().getFullYear()}
+              © Customizable {new Date().getFullYear()}
             </Typography>
           </Box>
         </Box>

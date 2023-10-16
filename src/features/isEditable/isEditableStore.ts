@@ -1,14 +1,16 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit"
-import counterReducer from "../features/counter/counterSlice"
-
+import isEditableReducer, { IsEditableState } from './isEditableSlice'
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
+    isEditable: isEditableReducer,
   },
 })
 
 export type AppDispatch = typeof store.dispatch
-export type RootState = ReturnType<typeof store.getState>
+export interface RootState {
+  isEditable: IsEditableState,
+  value: boolean
+}
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,
