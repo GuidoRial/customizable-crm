@@ -1,7 +1,7 @@
-import { RouterProvider } from 'react-router-dom';
+import { RouterProvider } from "react-router-dom"
 import "./App.css"
-import LoggedInRoutes from './routes/LoggedInRoutes';
-import NotLoggedInRoutes from './routes/NotLoggedInRoutes';
+import LoggedInRoutes from "./routes/LoggedInRoutes"
+import NotLoggedInRoutes from "./routes/NotLoggedInRoutes"
 
 function App() {
   return (
@@ -12,7 +12,7 @@ function App() {
         <RouterProvider router={NotLoggedInRoutes()} />
       )}
     </>
-  );
+  )
 }
 
 export default App
