@@ -10,8 +10,38 @@ import BadgeRoundedIcon from "@mui/icons-material/BadgeRounded"
 import ColorSchemeToggle from "../components/shared/ColorSchemeToggle"
 import ControlledTextField from "../components/inputs/ControlledTextField"
 import { useForm } from "react-hook-form"
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff"
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye"
+import { fieldRequired, isEmail, mustMatch } from "../rules"
 
-const LoginForm = ({ control }: { control: any }) => {
+const PasswordEndDecorator = ({
+  showPassword,
+  setShowPassword,
+}: Partial<IForm>) => {
+  if (showPassword) {
+    return (
+      <VisibilityOffIcon
+        sx={{ cursor: "pointer" }}
+        onClick={() => setShowPassword(!showPassword)}
+      />
+    )
+  }
+
+  return (
+    <RemoveRedEyeIcon
+      sx={{ cursor: "pointer" }}
+      onClick={() => setShowPassword(!showPassword)}
+    />
+  )
+}
+
+interface IForm {
+  control: any
+  showPassword: boolean
+  setShowPassword: any
+  getValues?: any
+}
+const LoginForm = ({ control, showPassword, setShowPassword }: IForm) => {
   return (
     <>
       <ControlledTextField
@@ -20,19 +50,31 @@ const LoginForm = ({ control }: { control: any }) => {
         name="auth.email"
         control={control}
         required
+        rules={isEmail()}
       />
       <ControlledTextField
-        type="password"
+        type={showPassword ? "text" : "password"}
         label="Password"
         name="auth.password"
         control={control}
         required
+        endDecorator={
+          <PasswordEndDecorator
+            showPassword={showPassword}
+            setShowPassword={setShowPassword}
+          />
+        }
       />
     </>
   )
 }
 
-const SignUpForm = ({ control }: { control: any }) => {
+const SignUpForm = ({
+  control,
+  showPassword,
+  setShowPassword,
+  getValues,
+}: IForm) => {
   return (
     <>
       <ControlledTextField
@@ -40,13 +82,14 @@ const SignUpForm = ({ control }: { control: any }) => {
         name="auth.first_name"
         control={control}
         required
+        rules={fieldRequired("First Name")}
       />
-
       <ControlledTextField
         label="Last Name"
         name="auth.last_name"
         control={control}
         required
+        rules={fieldRequired("Last Name")}
       />
       <ControlledTextField
         type="email"
@@ -54,20 +97,35 @@ const SignUpForm = ({ control }: { control: any }) => {
         name="auth.email"
         control={control}
         required
+        rules={isEmail()}
       />
       <ControlledTextField
-        type="password"
+        type={showPassword ? "text" : "password"}
         label="Password"
         name="auth.password"
         control={control}
         required
+        endDecorator={
+          <PasswordEndDecorator
+            showPassword={showPassword}
+            setShowPassword={setShowPassword}
+          />
+        }
+        rules={fieldRequired("Password")}
       />
       <ControlledTextField
-        type="password"
+        type={showPassword ? "text" : "password"}
         label="Confirm Password"
         name="auth.confirm_password"
         control={control}
         required
+        endDecorator={
+          <PasswordEndDecorator
+            showPassword={showPassword}
+            setShowPassword={setShowPassword}
+          />
+        }
+        rules={mustMatch("auth.password", getValues, "Password")}
       />
     </>
   )
@@ -77,12 +135,16 @@ interface IAuthForm {
   auth: {
     email: string
     password: string
+    confirm_password?: string
+    first_name?: string
+    last_name?: string
   }
 }
 const AuthForm = ({ mode }: { mode: string }) => {
+  const [showPassword, setShowPassword] = React.useState(false)
   // const isEditable = useSelector(isEditableState)
   // const dispatch = useDispatch()
-  const { handleSubmit, control } = useForm<IAuthForm>({
+  const { handleSubmit, control, getValues } = useForm<IAuthForm>({
     defaultValues: {
       auth: {},
     },
@@ -91,13 +153,19 @@ const AuthForm = ({ mode }: { mode: string }) => {
   const onSubmit = ({ auth }: IAuthForm) => {
     console.log(auth)
   }
+  const params = {
+    control,
+    showPassword,
+    setShowPassword,
+    getValues,
+  }
   return (
     <Stack gap={4} sx={{ mt: 2 }}>
       <Stack gap={4} sx={{ mt: 2 }}>
         {mode === "signin" ? (
-          <SignUpForm control={control} />
+          <SignUpForm {...params} />
         ) : (
-          <LoginForm control={control} />
+          <LoginForm {...params} />
         )}
         <Button type="submit" fullWidth onClick={handleSubmit(onSubmit)}>
           {mode == "signin" ? "Sign In" : "Log In"}
@@ -195,7 +263,7 @@ export default function Login() {
             <Stack gap={4} sx={{ mb: 2 }}>
               <Stack gap={1}>
                 <Typography level="h3">
-                  {mode === "signin" ? "Log In" : "Sign Up"}
+                  {mode === "signin" ? "Sign Up" : "Log In"}
                 </Typography>
               </Stack>
             </Stack>
