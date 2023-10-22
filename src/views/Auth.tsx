@@ -15,7 +15,15 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff"
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye"
 import { fieldRequired, isEmail, mustMatch } from "../rules"
 import { useParams } from "react-router-dom"
-
+import { useDispatch, useSelector } from "react-redux"
+import authSlice, {
+  loginAsync,
+  selectAuth,
+  signUpAsync,
+} from "../features/auth/authSlice"
+import { ISignUpUserDTO } from "../interfaces/IAuth"
+import { AnyAction } from "redux"
+import Alerts from "../components/ui/Alerts"
 const PasswordEndDecorator = ({
   showPassword,
   setShowPassword,
@@ -137,13 +145,16 @@ interface IAuthForm {
   auth: {
     email: string
     password: string
-    confirm_password?: string
-    first_name?: string
-    last_name?: string
+    confirm_password: string
+    first_name: string
+    last_name: string
   }
 }
 const AuthForm = ({ mode }: { mode: string }) => {
-  console.log(mode)
+  const { loading } = useSelector(selectAuth)
+
+  console.log(loading)
+  const dispatch = useDispatch()
   const [showPassword, setShowPassword] = React.useState(false)
   // const isEditable = useSelector(isEditableState)
   // const dispatch = useDispatch()
@@ -154,6 +165,7 @@ const AuthForm = ({ mode }: { mode: string }) => {
   })
 
   const onSubmit = ({ auth }: IAuthForm) => {
+    dispatch(signUpAsync(auth) as unknown as AnyAction)
     console.log(auth)
   }
   const params = {
@@ -170,7 +182,12 @@ const AuthForm = ({ mode }: { mode: string }) => {
         ) : (
           <LoginForm {...params} />
         )}
-        <Button type="submit" fullWidth onClick={handleSubmit(onSubmit)}>
+        <Button
+          type="submit"
+          fullWidth
+          onClick={handleSubmit(onSubmit)}
+          loading={loading}
+        >
           {mode === "signup" ? "Sign Up" : "Log In"}
         </Button>
       </Stack>
