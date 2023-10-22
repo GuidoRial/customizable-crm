@@ -3,13 +3,13 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom"
-import Login from "../views/Login"
+import Auth from "../views/Auth"
 
 function NotLoggedInRoutes() {
   return createBrowserRouter(
     createRoutesFromElements(
       <>
-        <Route path="/login" element={<Login />}></Route>
+        <Route path="/auth/:mode" element={<Auth />}></Route>
       </>,
     ),
   )

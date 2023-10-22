@@ -4,6 +4,7 @@ import Button from "@mui/joy/Button"
 import { formLabelClasses } from "@mui/joy/FormLabel"
 import IconButton from "@mui/joy/IconButton"
 import Link from "@mui/joy/Link"
+import { Link as RouterLink } from "react-router-dom"
 import Typography from "@mui/joy/Typography"
 import Stack from "@mui/joy/Stack"
 import BadgeRoundedIcon from "@mui/icons-material/BadgeRounded"
@@ -13,6 +14,7 @@ import { useForm } from "react-hook-form"
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff"
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye"
 import { fieldRequired, isEmail, mustMatch } from "../rules"
+import { useParams } from "react-router-dom"
 
 const PasswordEndDecorator = ({
   showPassword,
@@ -141,6 +143,7 @@ interface IAuthForm {
   }
 }
 const AuthForm = ({ mode }: { mode: string }) => {
+  console.log(mode)
   const [showPassword, setShowPassword] = React.useState(false)
   // const isEditable = useSelector(isEditableState)
   // const dispatch = useDispatch()
@@ -162,28 +165,22 @@ const AuthForm = ({ mode }: { mode: string }) => {
   return (
     <Stack gap={4} sx={{ mt: 2 }}>
       <Stack gap={4} sx={{ mt: 2 }}>
-        {mode === "signin" ? (
+        {mode === "signup" ? (
           <SignUpForm {...params} />
         ) : (
           <LoginForm {...params} />
         )}
         <Button type="submit" fullWidth onClick={handleSubmit(onSubmit)}>
-          {mode == "signin" ? "Sign In" : "Log In"}
+          {mode === "signup" ? "Sign Up" : "Log In"}
         </Button>
       </Stack>
     </Stack>
   )
 }
 
-export default function Login() {
-  const [mode, setMode] = React.useState("login")
-  const switchMode = () => {
-    if (mode == "signin") {
-      setMode("login")
-    } else {
-      setMode("signin")
-    }
-  }
+export default function Auth() {
+  const mode = useParams().mode as string
+
   return (
     <>
       <Box
@@ -263,7 +260,7 @@ export default function Login() {
             <Stack gap={4} sx={{ mb: 2 }}>
               <Stack gap={1}>
                 <Typography level="h3">
-                  {mode === "signin" ? "Sign Up" : "Log In"}
+                  {mode === "signup" ? "Sign Up" : "Log In"}
                 </Typography>
               </Stack>
             </Stack>
@@ -273,12 +270,16 @@ export default function Login() {
             <Stack gap={4} sx={{ mb: 2 }}>
               <Stack gap={1} direction="row">
                 <Typography level="body-sm">
-                  {mode === "signin"
+                  {mode === "signup"
                     ? "Already have an account?"
                     : "Don't have an account?"}
                 </Typography>
-                <Link href="#" level="title-sm" onClick={() => switchMode()}>
-                  {mode === "signin" ? "Log In" : "Sign Up"}
+                <Link
+                  level="title-sm"
+                  component={RouterLink}
+                  to={`/auth/${mode === "signin" ? "signup" : "signin"}`}
+                >
+                  {mode === "signup" ? "Log In" : "Sign Up"}
                 </Link>
               </Stack>
             </Stack>
