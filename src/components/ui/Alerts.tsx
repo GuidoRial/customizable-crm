@@ -9,6 +9,11 @@ import Alert from "@mui/joy/Alert"
 import IconButton from "@mui/joy/IconButton"
 import Typography from "@mui/joy/Typography"
 import { ColorPaletteProp } from "@mui/joy/styles"
+import { useDispatch, useSelector } from "react-redux"
+import alertSlice, {
+  selectAlert,
+  setAlert,
+} from "../../features/alert/alertSlice"
 interface IAlert {
   [key: string]: {
     title: string
@@ -19,7 +24,10 @@ interface IAlert {
 interface IAlertsProps {
   type: "success" | "warning" | "error" | "neutral"
 }
-export default function Alerts({ type }: IAlertsProps = { type: "neutral" }) {
+export default function Alerts() {
+  const data = useSelector(selectAlert)
+  const dispatch = useDispatch()
+
   const alerts: IAlert = {
     success: {
       title: "Success",
@@ -42,46 +50,67 @@ export default function Alerts({ type }: IAlertsProps = { type: "neutral" }) {
       icon: <InfoIcon />,
     },
   }
+  const { display, type, message, title } = data
+  const alert = React.useMemo(
+    () =>
+      type ? alerts[type] : { title: "", color: "neutral", icon: <InfoIcon /> },
+    [display, type, message, title],
+  ) as any
 
-  const alert = alerts[type]
-
-  return (
+  return display ? (
     <Box
-    sx={{
-      position: "fixed",
-      bottom: 30,
-      left: "80%",
-      width: '30%',
-      transform: "translateX(-50%)",
-      display: "flex",
-      direction: "column",
-      alignItems: "flex-end",
-      zIndex: 9999,
-    }}
-  >
-    <Box
-      sx={{ display: "flex", gap: 2, width: "100%", flexDirection: "column" , opacity: '0.9'}}
+      sx={{
+        position: "fixed",
+        bottom: 30,
+        left: "80%",
+        width: "30%",
+        transform: "translateX(-50%)",
+        display: "flex",
+        direction: "column",
+        alignItems: "flex-end",
+        zIndex: 9999,
+      }}
     >
-      <Alert
-        key={alert.title}
-        sx={{ alignItems: "flex-start" }}
-        startDecorator={alert.icon}
-        variant="soft"
-        color={alert.color}
-        endDecorator={
-          <IconButton variant="soft" color={alert.color}>
-            <CloseRoundedIcon />
-          </IconButton>
-        }
+      <Box
+        sx={{
+          display: "flex",
+          gap: 2,
+          width: "100%",
+          flexDirection: "column",
+          opacity: "0.9",
+        }}
       >
-        <div>
-          <div>{alert.title}</div>
-          <Typography level="body-sm" color={alert.color}>
-            This is a time-sensitive {alert.title} Alert.
-          </Typography>
-        </div>
-      </Alert>
+        <Alert
+          key={title ? title : alert?.title}
+          sx={{ alignItems: "flex-start" }}
+          startDecorator={alert?.icon}
+          variant="soft"
+          color={alert?.color}
+          endDecorator={
+            <IconButton variant="soft" color={alert?.color}>
+              <CloseRoundedIcon
+                onClick={() =>
+                  dispatch(
+                    setAlert({
+                      display: false,
+                      type: "success",
+                      message: "",
+                      title: "",
+                    }),
+                  )
+                }
+              />
+            </IconButton>
+          }
+        >
+          <div>
+            <div>{title ? title : alert?.title}</div>
+            <Typography level="body-sm" color={alert?.color}>
+              {message}
+            </Typography>
+          </div>
+        </Alert>
+      </Box>
     </Box>
-    </Box>
-  )
+  ) : null
 }

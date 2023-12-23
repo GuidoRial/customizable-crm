@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client"
 import { Provider } from "react-redux"
 import { store as isEditableStore } from "./features/isEditable/isEditableStore"
 import { store as authStore } from "./features/auth/authStore"
+import { store as alertsStore } from "./features/alert/alertStore"
 import App from "./App"
 import "./index.css"
 import { CssBaseline, CssVarsProvider, GlobalStyles } from "@mui/joy"
@@ -32,6 +33,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         </Provider>
       </CssVarsProvider>
     </Provider>
-    <Alerts type="success" />
+    <Provider store={alertsStore}>
+      <Alerts />
+    </Provider>
   </React.StrictMode>,
 )

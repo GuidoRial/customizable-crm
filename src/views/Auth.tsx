@@ -152,8 +152,6 @@ interface IAuthForm {
 }
 const AuthForm = ({ mode }: { mode: string }) => {
   const { loading } = useSelector(selectAuth)
-
-  console.log(loading)
   const dispatch = useDispatch()
   const [showPassword, setShowPassword] = React.useState(false)
   // const isEditable = useSelector(isEditableState)
@@ -164,9 +162,13 @@ const AuthForm = ({ mode }: { mode: string }) => {
     },
   })
 
-  const onSubmit = ({ auth }: IAuthForm) => {
-    dispatch(signUpAsync(auth) as unknown as AnyAction)
-    console.log(auth)
+  const onSubmit = async ({ auth }: IAuthForm) => {
+    try {
+      dispatch(signUpAsync(auth) as unknown as AnyAction)
+      // console.log(auth)
+    } catch (e) {
+      console.log(e)
+    }
   }
   const params = {
     control,

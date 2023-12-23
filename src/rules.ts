@@ -7,7 +7,6 @@ export const fieldRequired = (field: string) => {
 export const isEmail = () => {
   return {
     validate: (value: any) => {
-      console.log(value)
       return (
         value.match(
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
