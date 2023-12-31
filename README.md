@@ -1,27 +1,34 @@
-# vite-template-redux
+# customizable-crm
 
-Uses [Vite](https://vitejs.dev/), [Vitest](https://vitest.dev/), and [React Testing Library](https://github.com/testing-library/react-testing-library) to create a modern [React](https://react.dev/) app compatible with [Create React App](https://create-react-app.dev/)
-
-```sh
-npx degit reduxjs/redux-templates/packages/vite-template-redux my-app
+## Project setup
+```
+npm install
 ```
 
-## Goals
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
 
-- Easy migration from Create React App or Vite
-- As beginner friendly as Create React App
-- Optimized performance compared to Create React App
-- Customizable without ejecting
+### Compiles and minifies for production
+```
+npm run build
+```
 
-## Scripts
+### Run your unit tests
+```
+npm run test:unit
+```
 
-- `dev`/`start` - start dev server and open browser
-- `build` - build for production
-- `preview` - locally preview production build
-- `test` - launch test runner
+### Run your end-to-end tests
+```
+npm run test:e2e
+```
 
-## Inspiration
+### Lints and fixes files
+```
+npm run lint
+```
 
-- [Create React App](https://github.com/facebook/create-react-app/tree/main/packages/cra-template)
-- [Vite](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react)
-- [Vitest](https://github.com/vitest-dev/vitest/tree/main/examples/react-testing-lib)
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
