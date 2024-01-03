@@ -1,19 +1,39 @@
+// External libraries
 import { createApp } from 'vue';
-import App from './App.vue';
-import router from './router';
 import { createPinia } from 'pinia';
 import PrimeVue from 'primevue/config';
-import InputText from 'primevue/inputtext';
-
-import Checkbox from 'primevue/checkbox';
-
 import 'primevue/resources/themes/lara-dark-purple/theme.css';
 import 'primeicons/primeicons.css';
+
+// Components
+import App from './App.vue';
+import router from './router';
+import InputText from 'primevue/inputtext';
+import Card from 'primevue/card';
+import Button from 'primevue/button';
+import Checkbox from 'primevue/checkbox';
+import InputGroup from 'primevue/inputgroup';
+import InputGroupAddon from 'primevue/inputgroupaddon';
+import Password from 'primevue/password';
+
+// Pinia setup
 const pinia = createPinia();
 
+// Components to be used
 const toBeUsed = [router, pinia, PrimeVue];
-const components = [{ name: 'InputText', component: InputText }, { name: 'Checkbox', component: Checkbox }];
 
+// Components with names and corresponding implementations
+const components = [
+  { name: 'InputText', component: InputText },
+  { name: 'Checkbox', component: Checkbox },
+  { name: 'Card', component: Card },
+  { name: 'Button', component: Button },
+  { name: 'InputGroup', component: InputGroup },
+  { name: 'InputGroupAddon', component: InputGroupAddon },
+  { name: 'Password', component: Password },
+];
+
+// App creation and setup
 const app = createApp(App);
 
 toBeUsed.forEach((item) => {
@@ -24,6 +44,5 @@ components.forEach((item) => {
   app.component(item.name, item.component);
 });
 
+// Mount the app
 app.mount('#app');
-
-// createApp(App).use(router).use(pinia).use(PrimeVue).component('InputText', InputText).mount('#app');
