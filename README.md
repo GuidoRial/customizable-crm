@@ -1,5 +1,9 @@
 # customizable-crm
 
+## Resources
+- https://primevue.org/autocomplete/
+- https://vee-validate.logaretm.com/v4/
+
 ## Project setup
 ```
 npm install
