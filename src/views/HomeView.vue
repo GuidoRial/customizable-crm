@@ -19,5 +19,8 @@ export default defineComponent({
       msg: 'Welcome to Your Vue.js + TypeScript App',
     };
   },
+  mounted() {
+    console.log('home');
+  },
 });
 </script>

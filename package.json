@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "prettier": "prettier --write \"src/**/*.+(js|jsx|vue)\"",
-    "serve": "vue-cli-service serve",
+    "prettier": "prettier --write \"src/**/*.+(js|jsx|ts|tsx|vue)\"",
+    "serve": "npm run prettier && vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
