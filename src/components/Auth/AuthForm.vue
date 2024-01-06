@@ -1,7 +1,8 @@
 <template>
   <div class="card-container">
-    <SignUpForm v-if="action === 'signup'" @formValid="handleSignup" />
-    <LoginForm v-else />
+    <SignUpForm :loading="loading" v-if="action === 'signup'" @formValid="handleSignup" />
+    <LoginForm :loading="loading" v-else @formValid="handleLogin" />
+    <Toast position="bottom-right" />
   </div>
 </template>
 
@@ -12,9 +13,15 @@ import SignUpForm from './SignUpForm.vue';
 import LoginForm from './LoginForm.vue';
 import { mapActions } from 'pinia';
 import useUsers from '@/store/users';
+import useAuth from '@/store/auth';
 export default defineComponent({
-  name: 'login-view',
+  name: 'auth-form',
   components: { SignUpForm, LoginForm },
+  data() {
+    return {
+      loading: false,
+    };
+  },
   props: {
     action: {
       type: String,
@@ -26,12 +33,48 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(useUsers, ['getUsernames']),
-    handleSignup(user: AuthUserDTO) {
-      console.log(user);
-      console.log('Signup successful');
+    ...mapActions(useAuth, ['login', 'signup']),
+    show() {
+      this.$toast.add({
+        severity: 'error',
+        summary: 'Error Message',
+        detail: 'Message Content',
+        life: 3000,
+      });
     },
-    handleLogin() {
-      console.log('Login successful');
+    async handleSignup(user: AuthUserDTO) {
+      try {
+        this.loading = true;
+        await this.signup(user);
+        this.$router.push({ name: 'home' });
+      } catch (e: any) {
+        console.log({ e });
+        this.$toast.add({
+          severity: 'error',
+          summary: e.message,
+          detail: e.response.data.message,
+          life: 3000,
+        });
+      } finally {
+        this.loading = false;
+      }
+    },
+    async handleLogin(user: AuthUserDTO) {
+      try {
+        this.loading = true;
+        await this.login(user);
+        this.$router.push({ name: 'home' });
+      } catch (e: any) {
+        console.log({ e });
+        this.$toast.add({
+          severity: 'error',
+          summary: e.message,
+          detail: e.response.data.message,
+          life: 3000,
+        });
+      } finally {
+        this.loading = false;
+      }
     },
   },
 });

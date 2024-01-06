@@ -21,41 +21,45 @@ const useAuth = defineStore('auth', {
     },
   },
   actions: {
+    storeItem(key: string, value: string) {
+      window.localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
+    },
+    removeItem(key: string) {
+      window.localStorage.removeItem(key);
+    },
+    getItem(key: string) {
+      return window.localStorage.getItem(key);
+    },
     async login(credentials: IUser) {
       try {
         const data = await auth.login(credentials);
-        console.log({ data });
-        debugger;
-        // this.user = user;
-        // this.token = token;
-        // localStorage.setItem('user', JSON.stringify(user));
-        // localStorage.setItem('token', token);
-        // return user;
+        const { sesion: token, user } = data;
+        this.storeItem('access-token', token);
+        this.storeItem('user', user);
+        this.user = user;
+        this.token = token;
+        return data;
       } catch (e) {
         console.log(e);
         throw e;
       }
     },
-    async signup(user: IUser) {
+    async signup(credentials: IUser) {
       try {
-        const data = await auth.signUp(user);
-        console.log({ data });
-
-        debugger;
-        // this.user = res.result.user;
-        // this.token = res.result.token;
-        // const token = res.result.token;
-        // window.localStorage.setItem('token', token);
-        // window.localStorage.setItem('user', JSON.stringify(this.user));
-        // return res.result;
+        const data = await auth.signUp(credentials);
+        const { sesion: token, user } = data;
+        this.storeItem('access-token', token);
+        this.storeItem('user', user);
+        this.user = user;
+        this.token = token;
       } catch (e) {
         console.log(e);
         throw e;
       }
     },
     logout() {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
+      this.removeItem('token');
+      this.removeItem('user');
       this.token = '';
       this.user = {};
     },

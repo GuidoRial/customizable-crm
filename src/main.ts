@@ -18,6 +18,8 @@ import InputGroupAddon from 'primevue/inputgroupaddon';
 import Password from 'primevue/password';
 import Toast from 'primevue/toast';
 import TriStateCheckbox from 'primevue/tristatecheckbox';
+import Message from 'primevue/message';
+import ProgressSpinner from 'primevue/progressspinner';
 
 // Pinia setup
 const pinia = createPinia();
@@ -36,6 +38,8 @@ const components = [
   { name: 'Password', component: Password },
   { name: 'Toast', component: Toast },
   { name: 'TriStateCheckbox', component: TriStateCheckbox },
+  { name: 'Message', component: Message },
+  { name: 'ProgressSpinner', component: ProgressSpinner },
 ];
 
 // App creation and setup

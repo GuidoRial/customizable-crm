@@ -81,11 +81,18 @@
         </template>
         <template #footer>
           <div class="footer">
-            <Button icon="pi pi-check" label="Save" type="submit" />
+            <Button label="Sign Up" type="submit">
+              <ProgressSpinner
+                v-if="loading"
+                style="width: 3.7rem; height: 1.2rem"
+                strokeWidth="8"
+              />
+            </Button>
             <ErrorMessage
               v-if="errorMessageShouldBeShown"
               :errorMessage="errorMessages[currentErrorField]"
             />
+            <div>Already have an account? <Link to="/login" text="Login" /></div>
           </div>
         </template>
       </Card>
@@ -95,10 +102,6 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import InputText from 'primevue/inputtext';
-import Card from 'primevue/card';
-import InputGroup from 'primevue/inputgroup';
-import InputGroupAddon from 'primevue/inputgroupaddon';
 import {
   fieldCannotBeEmpty,
   fieldShouldBeLessThanComparatorCharacters,
@@ -111,10 +114,18 @@ import { AuthUserDTO, FieldConditions, ErrorMessages } from '@/interfaces/auth';
 import useUsers from '@/store/users';
 import { mapActions } from 'pinia';
 import ErrorMessage from '@/components/Auth/ErrorMessage.vue';
+import Link from '@/components/shared/Link.vue';
 export default defineComponent({
   name: 'sign-up-form',
+  props: {
+    loading: {
+      type: Boolean,
+      required: true,
+    },
+  },
   components: {
     ErrorMessage,
+    Link,
   },
   data() {
     return {
@@ -263,5 +274,6 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  padding: 0.5rem;
 }
 </style>
