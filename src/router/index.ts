@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
+import useAuth from '@/store/auth';
 // import useAuth from '@/store/auth';
 
 const routes: Array<RouteRecordRaw> = [
@@ -17,23 +18,23 @@ const routes: Array<RouteRecordRaw> = [
         name: 'login',
         path: 'login',
         component: () => import('@/views/LoginView.vue'),
-        // beforeEnter: (to, from) => {
-        //   const authStore = useAuth();
-        //   if (authStore?.isLoggedIn) {
-        //     return { name: 'home' };
-        //   }
-        // },
+        beforeEnter: (to, from) => {
+          const authStore = useAuth();
+          if (authStore?.isLoggedIn) {
+            return { name: 'home' };
+          }
+        },
       },
       {
         name: 'signup',
         path: 'signup',
         component: () => import('@/views/SignupView.vue'),
-        // beforeEnter: (to, from) => {
-        //   const authStore = useAuth();
-        //   if (authStore?.isLoggedIn) {
-        //     return { name: 'home' };
-        //   }
-        // },
+        beforeEnter: (to, from) => {
+          const authStore = useAuth();
+          if (authStore?.isLoggedIn) {
+            return { name: 'home' };
+          }
+        },
       },
     ],
   },

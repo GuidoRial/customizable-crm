@@ -33,11 +33,12 @@ const useAuth = defineStore('auth', {
     async login(credentials: IUser) {
       try {
         const data = await auth.login(credentials);
-        const { sesion: token, user } = data;
-        this.storeItem('access-token', token);
+        const { session, user } = data;
+        console.log(data)
+        this.storeItem('access-token', session);
         this.storeItem('user', user);
         this.user = user;
-        this.token = token;
+        this.token = session;
         return data;
       } catch (e) {
         console.log(e);
@@ -47,7 +48,7 @@ const useAuth = defineStore('auth', {
     async signup(credentials: IUser) {
       try {
         const data = await auth.signUp(credentials);
-        const { sesion: token, user } = data;
+        const { session: token, user } = data;
         this.storeItem('access-token', token);
         this.storeItem('user', user);
         this.user = user;
