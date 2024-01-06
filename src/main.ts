@@ -3,6 +3,7 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import PrimeVue from 'primevue/config';
 import ToastService from 'primevue/toastservice';
+
 import 'primevue/resources/themes/lara-dark-purple/theme.css';
 import 'primeicons/primeicons.css';
 // Components

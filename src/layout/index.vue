@@ -5,8 +5,5 @@
 <script lang="ts">
 export default {
   name: 'Layout-Test',
-  mounted() {
-    console.log('layout');
-  },
 };
 </script>
