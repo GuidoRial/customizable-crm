@@ -46,9 +46,8 @@ export default defineComponent({
       try {
         this.loading = true;
         await this.signup(user);
-        this.$router.push({ name: 'home' });
+        this.$router.push({ name: 'blueprints' });
       } catch (e: any) {
-        console.log({ e });
         this.$toast.add({
           severity: 'error',
           summary: e.message,
@@ -63,9 +62,8 @@ export default defineComponent({
       try {
         this.loading = true;
         await this.login(user);
-        this.$router.push({ name: 'home' });
+        this.$router.push({ name: 'blueprints' });
       } catch (e: any) {
-        console.log({ e });
         this.$toast.add({
           severity: 'error',
           summary: e.message,

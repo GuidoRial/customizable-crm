@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import useAuth from '@/store/auth';
-// import useAuth from '@/store/auth';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -17,8 +16,8 @@ const routes: Array<RouteRecordRaw> = [
       {
         name: 'login',
         path: 'login',
-        component: () => import('@/views/LoginView.vue'),
-        beforeEnter: (to, from) => {
+        component: () => import('@/views/Auth/LoginView.vue'),
+        beforeEnter: () => {
           const authStore = useAuth();
           if (authStore?.isLoggedIn) {
             return { name: 'home' };
@@ -28,13 +27,36 @@ const routes: Array<RouteRecordRaw> = [
       {
         name: 'signup',
         path: 'signup',
-        component: () => import('@/views/SignupView.vue'),
-        beforeEnter: (to, from) => {
+        component: () => import('@/views/Auth/SignupView.vue'),
+        beforeEnter: () => {
           const authStore = useAuth();
           if (authStore?.isLoggedIn) {
             return { name: 'home' };
           }
         },
+      },
+      {
+        name: 'dashboard',
+        path: 'dashboard',
+        component: () => import('@/views/Dashboard.vue'),
+        beforeEnter: () => {
+          const authStore = useAuth();
+          if (!authStore?.isLoggedIn) {
+            return { name: 'login' };
+          }
+        },
+        children: [
+          {
+            name: 'blueprints',
+            path: 'blueprints',
+            component: () => import('@/views/Blueprints/Blueprints.vue'),
+          },
+          {
+            name: 'blueprints-create',
+            path: 'create',
+            component: () => import('@/views/Blueprints/CreateBlueprint.vue'),
+          },
+        ],
       },
     ],
   },

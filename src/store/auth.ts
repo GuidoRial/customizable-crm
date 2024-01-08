@@ -34,7 +34,6 @@ const useAuth = defineStore('auth', {
       try {
         const data = await auth.login(credentials);
         const { session, user } = data;
-        console.log(data)
         this.storeItem('access-token', session);
         this.storeItem('user', user);
         this.user = user;
@@ -59,7 +58,7 @@ const useAuth = defineStore('auth', {
       }
     },
     logout() {
-      this.removeItem('token');
+      this.removeItem('access-token');
       this.removeItem('user');
       this.token = '';
       this.user = {};
