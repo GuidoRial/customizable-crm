@@ -94,6 +94,11 @@ export default defineComponent({
               icon: 'pi pi-plus',
               command: () => this.$router.push({ name: 'blueprints-create' }),
             },
+            {
+              label: 'About Blueprints',
+              icon: 'pi pi-question',
+              command: () => this.$router.push({ name: 'blueprints-about' }),
+            },
           ],
         },
         {

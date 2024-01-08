@@ -2,13 +2,17 @@
   <div class="create-blueprint">
     <div class="header">
       <h1>Create Blueprint</h1>
+      <InfoIcon
+        @click="$router.push({ name: 'blueprints-about' })"
+        tooltipText="Feel lost? Click me."
+      />
     </div>
     <Steps :model="items" :active-step="active" />
     <div class="card-container">
       <Card class="card">
         <template #content>
-          <StepOne v-if="active === 0" :blueprint="blueprint" />
-          <StepTwo v-else-if="active === 1" :fields="fields" />
+          <BasicInfoStep v-if="active === 0" :blueprint="blueprint" />
+          <FieldsStep v-else-if="active === 1" :fields="fields" />
           <ReferenceStep
             v-else-if="active === 2 && blueprint.metadata.canBeReferenced"
             :fields="fields"
@@ -36,12 +40,12 @@
               label="Create Blueprint"
               type="button"
               @click="confirm1"
-              />
+            />
           </div>
         </template>
       </Card>
     </div>
-    <ConfirmPopup/>
+    <ConfirmPopup />
     <Toast />
   </div>
 </template>
@@ -49,13 +53,14 @@
 <script lang="ts">
 import { Blueprint, Field } from '@/interfaces/blueprints';
 import { defineComponent } from 'vue';
-import StepOne from '@/components/Blueprints/Steps/StepOne.vue';
-import StepTwo from '@/components/Blueprints/Steps/StepTwo.vue';
+import BasicInfoStep from '@/components/Blueprints/Steps/BasicInfoStep.vue';
+import FieldsStep from '@/components/Blueprints/Steps/FieldsStep.vue';
 import ReferenceStep from '@/components/Blueprints/Steps/ReferenceStep.vue';
 import ReviewStep from '@/components/Blueprints/Steps/ReviewStep.vue';
+import InfoIcon from '@/components/shared/InfoIcon.vue';
 export default defineComponent({
   name: 'blueprints-create',
-  components: { StepOne, StepTwo, ReferenceStep, ReviewStep },
+  components: { BasicInfoStep, FieldsStep, ReferenceStep, ReviewStep, InfoIcon },
   data() {
     return {
       blueprint: {
@@ -183,6 +188,7 @@ h2 {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 1rem;
   color: var(--primary-color);
 }
 .create-blueprint {

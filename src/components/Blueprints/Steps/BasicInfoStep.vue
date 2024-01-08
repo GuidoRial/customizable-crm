@@ -26,7 +26,7 @@
 
 <script lang="ts">
 export default {
-  name: 'step-one',
+  name: 'basic-info-step',
   props: {
     blueprint: {
       type: Object,

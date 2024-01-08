@@ -1,11 +1,13 @@
 <template>
   <div class="field-description">
-    <i class="pi pi-exclamation-circle icon" v-tooltip.top="tooltipText" />
+    <InfoIcon :tooltipText="tooltipText" />
     <p>{{ label }}</p>
   </div>
 </template>
 
 <script lang="ts">
+import InfoIcon from '@/components/shared/InfoIcon.vue';
+
 export default {
   name: 'field-description',
   props: {
@@ -18,6 +20,7 @@ export default {
       required: true,
     },
   },
+  components: { InfoIcon },
 };
 </script>
 
@@ -30,10 +33,5 @@ export default {
   height: 1.5rem;
   padding: 1rem 0;
   margin: 0.5rem 0rem;
-}
-
-.icon {
-  cursor: pointer;
-  color: var(--primary-color);
 }
 </style>

@@ -19,6 +19,8 @@
     "pinia": "^2.1.7",
     "primeicons": "^6.0.1",
     "primevue": "^3.45.0",
+    "sass": "^1.69.7",
+    "sass-loader": "^13.3.3",
     "vee-validate": "^4.12.4",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3"

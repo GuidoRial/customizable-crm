@@ -4,7 +4,7 @@
       <h2>Field {{ i + 1 }}</h2>
       <FieldDescription
         tooltipText="
-          Used to identify this field withing your blueprint. i.e: Full Name, Address, Contry
+          Used to identify this field within your blueprint. i.e: Full Name, Address, Contry
         "
         label="Field Name:"
       />
@@ -98,7 +98,7 @@ import { Field } from '@/interfaces/blueprints';
 import FieldDescription from './FieldDescription.vue';
 
 export default {
-  name: 'step-two',
+  name: 'fields-step',
   props: {
     fields: {
       type: Array as () => Field[],

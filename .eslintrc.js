@@ -14,6 +14,7 @@ module.exports = {
     ecmaVersion: 2020,
   },
   rules: {
+    'no-useless-escape': 'off',
     'vue/no-mutating-props': 'off',
     'prettier/prettier': 'warn',
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",

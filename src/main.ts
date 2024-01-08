@@ -31,6 +31,8 @@ import Dropdown from 'primevue/dropdown';
 import Divider from 'primevue/divider';
 import Tooltip from 'primevue/tooltip';
 import ConfirmPopup from 'primevue/confirmpopup';
+import Timeline from 'primevue/timeline';
+import Panel from 'primevue/panel';
 
 // Pinia setup
 const pinia = createPinia();
@@ -59,6 +61,8 @@ const components = [
   { name: 'Dropdown', component: Dropdown },
   { name: 'Divider', component: Divider },
   { name: 'ConfirmPopup', component: ConfirmPopup },
+  { name: 'Timeline', component: Timeline },
+  { name: 'Panel', component: Panel },
 ];
 
 // App creation and setup
