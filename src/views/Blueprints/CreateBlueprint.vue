@@ -11,17 +11,11 @@
     <div class="card-container">
       <Card class="card">
         <template #content>
-          <BasicInfoStep v-if="active === 0" :blueprint="blueprint" />
-          <FieldsStep v-else-if="active === 1" :fields="fields" />
-          <ReferenceStep
-            v-else-if="active === 2 && blueprint.metadata.canBeReferenced"
-            :fields="fields"
-            :blueprint="blueprint"
-          />
+          <BasicInfoStep v-if="active === 0" />
+          <FieldsStep v-else-if="active === 1" />
+          <ReferenceStep v-else-if="active === 2 && blueprint.metadata.canBeReferenced" />
           <ReviewStep
             v-else-if="(active === 2 && !blueprint.metadata.canBeReferenced) || active === 3"
-            :blueprint="blueprint"
-            :fields="fields"
           />
         </template>
         <template #footer>
@@ -51,58 +45,19 @@
 </template>
 
 <script lang="ts">
-import { Blueprint, Field } from '@/interfaces/blueprints';
 import { defineComponent } from 'vue';
 import BasicInfoStep from '@/components/Blueprints/Steps/BasicInfoStep.vue';
 import FieldsStep from '@/components/Blueprints/Steps/FieldsStep.vue';
 import ReferenceStep from '@/components/Blueprints/Steps/ReferenceStep.vue';
 import ReviewStep from '@/components/Blueprints/Steps/ReviewStep.vue';
 import InfoIcon from '@/components/shared/InfoIcon.vue';
+import { mapState } from 'pinia';
+import useBlueprint from '@/store/blueprint';
 export default defineComponent({
   name: 'blueprints-create',
   components: { BasicInfoStep, FieldsStep, ReferenceStep, ReviewStep, InfoIcon },
   data() {
     return {
-      blueprint: {
-        name: 'Contact',
-        description: 'A contact is a person or company that you want to keep track of.',
-        metadata: {
-          canBeReferenced: false,
-          map: '',
-        },
-      } as Blueprint,
-      fields: [
-        {
-          label: 'Is Active',
-          type: 'radio',
-          required: false,
-          options: ['Yes', 'No'],
-        },
-        {
-          label: 'Contact Name',
-          type: 'text',
-          required: false,
-          options: [''],
-        },
-        {
-          label: 'Contact Email',
-          type: 'text',
-          required: false,
-          options: [''],
-        },
-        {
-          label: 'Contact Phone',
-          type: 'text',
-          required: false,
-          options: [''],
-        },
-        {
-          label: 'Contact Address',
-          type: 'text',
-          required: false,
-          options: [''],
-        },
-      ] as Field[],
       active: 0 as number,
     };
   },
@@ -132,6 +87,7 @@ export default defineComponent({
     },
   },
   computed: {
+    ...mapState(useBlueprint, ['blueprint', 'fields']),
     items() {
       const base = [
         {
@@ -165,6 +121,8 @@ export default defineComponent({
               if (field.options?.some((option) => option === '')) return true;
             }
           }
+
+          if (this.fields.every((f) => f.type != 'text')) return true;
           return false;
         case 2:
           if (this.blueprint.metadata.canBeReferenced) {

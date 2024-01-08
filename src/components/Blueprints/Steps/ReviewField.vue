@@ -1,6 +1,15 @@
 <template>
   <div v-for="(field, i) in fields" :key="i">
-    <h3>{{ field.label }}</h3>
+    <div
+      class="header"
+      :style="{ color: blueprint.metadata.map === field.label ? 'var(--primary-color)' : 'white' }"
+    >
+      <h3>{{ field.label }}</h3>
+      <InfoIcon
+        v-if="blueprint.metadata.map === field.label"
+        tooltipText="This field will be used as a reference."
+      />
+    </div>
     <FieldDescription
       :tooltipText="getTooltipTextBasedOnFieldType(field.type)"
       :label="'Field type: ' + field.type"
@@ -20,22 +29,14 @@
   </div>
 </template>
 <script lang="ts">
-import { Field } from '@/interfaces/blueprints';
 import FieldDescription from './FieldDescription.vue';
-import Textarea from 'primevue/textarea';
+import { mapState } from 'pinia';
+import useBlueprint from '@/store/blueprint';
+import InfoIcon from '@/components/shared/InfoIcon.vue';
 export default {
   name: 'review-step',
-  props: {
-    fields: {
-      type: Array as () => Field[],
-      required: true,
-    },
-    blueprint: {
-      type: Object,
-      required: true,
-    },
-  },
   computed: {
+    ...mapState(useBlueprint, ['blueprint', 'fields']),
     getTooltipTextBasedOnFieldType() {
       return (type: string) => {
         const config: { [key: string]: string } = {
@@ -59,6 +60,14 @@ export default {
       return `${arr.slice(0, -1).join(', ')} and ${arr.slice(-1)}`;
     },
   },
-  components: { FieldDescription },
+  components: { FieldDescription, InfoIcon },
 };
 </script>
+<style scoped>
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+</style>

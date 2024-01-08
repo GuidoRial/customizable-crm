@@ -15,25 +15,19 @@
     </p>
     <Divider />
     <h2>Fields</h2>
-    <ReviewField :fields="fields" :blueprint="blueprint" />
+    <ReviewField />
   </div>
 </template>
 
 <script lang="ts">
-import { Field } from '@/interfaces/blueprints';
 import ReviewField from './ReviewField.vue';
+import { mapState } from 'pinia';
+import useBlueprint from '@/store/blueprint';
 
 export default {
   name: 'review-step',
-  props: {
-    fields: {
-      type: Array as () => Field[],
-      required: true,
-    },
-    blueprint: {
-      type: Object,
-      required: true,
-    },
+  computed: {
+    ...mapState(useBlueprint, ['blueprint', 'fields']),
   },
   components: { ReviewField },
 };

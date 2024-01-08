@@ -1,7 +1,10 @@
 <template>
   <div>
     <div v-for="(field, i) in fields" :key="i">
-      <h2>Field {{ i + 1 }}</h2>
+      <div class="header">
+        <h2>Field {{ i + 1 }}</h2>
+        <InfoIcon tooltipText="A text field is required." />
+      </div>
       <FieldDescription
         tooltipText="
           Used to identify this field within your blueprint. i.e: Full Name, Address, Contry
@@ -96,16 +99,13 @@
 <script lang="ts">
 import { Field } from '@/interfaces/blueprints';
 import FieldDescription from './FieldDescription.vue';
-
+import useBlueprint from '@/store/blueprint';
+import { mapState } from 'pinia';
+import InfoIcon from '@/components/shared/InfoIcon.vue';
 export default {
   name: 'fields-step',
-  props: {
-    fields: {
-      type: Array as () => Field[],
-      required: true,
-    },
-  },
   computed: {
+    ...mapState(useBlueprint, ['blueprint', 'fields']),
     addFieldBtnDisabled(): (fields: Field[], fieldIndex: number) => boolean {
       return (fields: Field[], fieldIndex: number): boolean => {
         const selectedField = fields[fieldIndex] as Field;
@@ -129,7 +129,7 @@ export default {
       });
     },
   },
-  components: { FieldDescription },
+  components: { FieldDescription, InfoIcon },
 };
 </script>
 
@@ -145,5 +145,13 @@ export default {
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  color: var(--primary-color);
 }
 </style>

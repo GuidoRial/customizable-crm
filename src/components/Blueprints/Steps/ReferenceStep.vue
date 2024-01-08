@@ -1,21 +1,20 @@
 <template>
   <div>
-    <div class="field-description">
-      <i
-        class="pi pi-exclamation-circle icon"
-        v-tooltip.top="
-          'Select the fill that will act as a reference for this blueprint. i.e: Full Name, Address, Country. This will be used when documents created from this blueprint are loaded into a dropdown (i.e: &quot;Select a contact&quot; could show the &quot;Contact Name&quot; field or &quot;Select a company&quot; could show the &quot;Company Name field&quot;)'
-        "
-      />
-      <p>Field that will act as a reference:</p>
-    </div>
+    <FieldDescription
+      tooltipText='Select the fill that will act as a reference for this blueprint. i.e: Full Name, Address, Country. This will be used when documents created from this blueprint are loaded into a dropdown (i.e: "Select a contact" could show the "Contact Name" field or "Select a company" could show the "Company Name field")'
+      label="Field that will act as a reference:"
+    />
 
     <InputGroup>
       <Dropdown
         placeholder="Select a field"
         optionLabel="label"
         optionValue="value"
-        :options="fields.map((field) => ({ label: field.label, value: field.label }))"
+        :options="
+          fields
+            .filter(({ type }) => type === 'text')
+            .map((field) => ({ label: field.label, value: field.label }))
+        "
         v-model="blueprint.metadata.map"
       />
     </InputGroup>
@@ -23,19 +22,14 @@
 </template>
 
 <script lang="ts">
-import { Field } from '@/interfaces/blueprints';
-
+import useBlueprint from '@/store/blueprint';
+import { mapState } from 'pinia';
+import FieldDescription from './FieldDescription.vue';
 export default {
   name: 'reference-step',
-  props: {
-    fields: {
-      type: Array as () => Field[],
-      required: true,
-    },
-    blueprint: {
-      type: Object,
-      required: true,
-    },
+  computed: {
+    ...mapState(useBlueprint, ['blueprint', 'fields']),
   },
+  components: { FieldDescription },
 };
 </script>

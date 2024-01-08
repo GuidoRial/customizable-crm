@@ -14,6 +14,7 @@ module.exports = {
     ecmaVersion: 2020,
   },
   rules: {
+    '@typescript-eslint/no-explicit-any': 'off',
     'no-useless-escape': 'off',
     'vue/no-mutating-props': 'off',
     'prettier/prettier': 'warn',

@@ -25,13 +25,16 @@
 </template>
 
 <script lang="ts">
+import useBlueprint from '@/store/blueprint';
+import { mapState, mapActions } from 'pinia';
+
 export default {
   name: 'basic-info-step',
-  props: {
-    blueprint: {
-      type: Object,
-      required: true,
-    },
+  computed: {
+    ...mapState(useBlueprint, ['blueprint']),
+  },
+  methods: {
+    ...mapActions(useBlueprint, ['updateField']),
   },
 };
 </script>
