@@ -51,7 +51,7 @@ import FieldsStep from '@/components/Blueprints/Steps/FieldsStep.vue';
 import ReferenceStep from '@/components/Blueprints/Steps/ReferenceStep.vue';
 import ReviewStep from '@/components/Blueprints/Steps/ReviewStep.vue';
 import InfoIcon from '@/components/shared/InfoIcon.vue';
-import { mapState } from 'pinia';
+import { mapActions, mapState } from 'pinia';
 import useBlueprint from '@/store/blueprint';
 export default defineComponent({
   name: 'blueprints-create',
@@ -62,12 +62,14 @@ export default defineComponent({
     };
   },
   methods: {
+    ...mapActions(useBlueprint, ['createBlueprint']),
     confirm1(event: any) {
       this.$confirm.require({
         target: event.currentTarget,
         message: 'Are you sure you want to create this blueprint?',
         icon: 'pi pi-exclamation-triangle',
-        accept: () => {
+        accept: async () => {
+          await this.createBlueprint();
           this.$toast.add({
             severity: 'info',
             summary: 'Confirmed',
