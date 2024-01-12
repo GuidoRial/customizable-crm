@@ -1,5 +1,10 @@
 import axios from './api';
 
+type Read = {
+  id?: string;
+  query?: Record<string, unknown>;
+};
+
 export default class BaseService {
   constructor(private baseURL: string) {}
 
@@ -8,7 +13,7 @@ export default class BaseService {
     return res.data;
   };
 
-  public read = async (id?: string, query?: Record<string, unknown>) => {
+  public read = async ({ id, query }: Read = {}) => {
     const res = await axios.get(this.baseURL + (id ? `/${id}` : ''), { params: query });
     return res.data;
   };

@@ -61,6 +61,11 @@ const routes: Array<RouteRecordRaw> = [
             path: 'about',
             component: () => import('@/views/Blueprints/AboutBlueprints.vue'),
           },
+          {
+            name: 'edit-blueprint',
+            path: 'edit/:id',
+            component: () => import('@/views/Blueprints/EditBlueprint.vue'),
+          },
         ],
       },
     ],

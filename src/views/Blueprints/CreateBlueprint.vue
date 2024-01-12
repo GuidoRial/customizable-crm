@@ -1,12 +1,12 @@
 <template>
   <div class="create-blueprint">
-    <div class="header">
-      <h1>Create Blueprint</h1>
-      <InfoIcon
-        @click="$router.push({ name: 'blueprints-about' })"
-        tooltipText="Feel lost? Click me."
-      />
-    </div>
+    <Title
+      title="Create Blueprint"
+      tooltipText="Feel lost? Click me."
+      to="blueprints-about"
+      action="redirect"
+    />
+
     <Steps :model="items" :active-step="active" />
     <div class="card-container">
       <Card class="card">
@@ -33,13 +33,12 @@
               class="p-button p-button-success"
               label="Create Blueprint"
               type="button"
-              @click="confirm1"
+              @click="create"
             />
           </div>
         </template>
       </Card>
     </div>
-    <ConfirmPopup />
     <Toast />
   </div>
 </template>
@@ -50,12 +49,13 @@ import BasicInfoStep from '@/components/Blueprints/Steps/BasicInfoStep.vue';
 import FieldsStep from '@/components/Blueprints/Steps/FieldsStep.vue';
 import ReferenceStep from '@/components/Blueprints/Steps/ReferenceStep.vue';
 import ReviewStep from '@/components/Blueprints/Steps/ReviewStep.vue';
-import InfoIcon from '@/components/shared/InfoIcon.vue';
 import { mapActions, mapState } from 'pinia';
 import useBlueprint from '@/store/blueprint';
+import { sleep } from '@/utils/sleep';
+import Title from '@/components/shared/Title.vue';
 export default defineComponent({
   name: 'blueprints-create',
-  components: { BasicInfoStep, FieldsStep, ReferenceStep, ReviewStep, InfoIcon },
+  components: { BasicInfoStep, FieldsStep, ReferenceStep, ReviewStep, Title },
   data() {
     return {
       active: 0 as number,
@@ -63,29 +63,27 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(useBlueprint, ['createBlueprint']),
-    confirm1(event: any) {
-      this.$confirm.require({
-        target: event.currentTarget,
-        message: 'Are you sure you want to create this blueprint?',
-        icon: 'pi pi-exclamation-triangle',
-        accept: async () => {
-          await this.createBlueprint();
-          this.$toast.add({
-            severity: 'info',
-            summary: 'Confirmed',
-            detail: 'You have accepted',
-            life: 3000,
-          });
-        },
-        reject: () => {
-          this.$toast.add({
-            severity: 'error',
-            summary: 'Rejected',
-            detail: 'You have rejected',
-            life: 3000,
-          });
-        },
-      });
+    async create() {
+      try {
+        const res = await this.createBlueprint();
+        console.log({ res });
+
+        this.$toast.add({
+          severity: 'info',
+          summary: 'Confirmed',
+          detail: 'Blueprint created successfully. Redirecting you to your blueprints page',
+          life: 3000,
+        });
+        await sleep(3000);
+        this.$router.push({ name: 'blueprints' });
+      } catch (e: any) {
+        this.$toast.add({
+          severity: 'error',
+          summary: e.message,
+          detail: e.response.data.message,
+          life: 3000,
+        });
+      }
     },
   },
   computed: {
@@ -144,16 +142,11 @@ export default defineComponent({
 h2 {
   margin: 0;
 }
-.header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  color: var(--primary-color);
-}
+
 .create-blueprint {
   margin: 1rem;
 }
+
 .card-container {
   margin-top: 2rem;
   display: flex;
