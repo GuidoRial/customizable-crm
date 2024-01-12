@@ -33,6 +33,7 @@ import FieldDescription from './FieldDescription.vue';
 import { mapState } from 'pinia';
 import useBlueprint from '@/store/blueprint';
 import InfoIcon from '@/components/shared/InfoIcon.vue';
+import { formatArrayWithAnd } from '@/utils/formatArrayWithAnd';
 export default {
   name: 'review-step',
   computed: {
@@ -55,10 +56,7 @@ export default {
     },
   },
   methods: {
-    formatArrayWithAnd(arr: string[]) {
-      if (arr.length === 1) return arr[0];
-      return `${arr.slice(0, -1).join(', ')} and ${arr.slice(-1)}`;
-    },
+    formatArrayWithAnd,
   },
   components: { FieldDescription, InfoIcon },
 };

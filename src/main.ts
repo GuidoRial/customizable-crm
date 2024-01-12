@@ -33,6 +33,11 @@ import Tooltip from 'primevue/tooltip';
 import ConfirmPopup from 'primevue/confirmpopup';
 import Timeline from 'primevue/timeline';
 import Panel from 'primevue/panel';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import ColumnGroup from 'primevue/columngroup'; // optional
+import Row from 'primevue/row'; // optional
+import Chip from 'primevue/chip';
 
 // Pinia setup
 const pinia = createPinia();
@@ -63,6 +68,11 @@ const components = [
   { name: 'ConfirmPopup', component: ConfirmPopup },
   { name: 'Timeline', component: Timeline },
   { name: 'Panel', component: Panel },
+  { name: 'DataTable', component: DataTable },
+  { name: 'Column', component: Column },
+  { name: 'ColumnGroup', component: ColumnGroup },
+  { name: 'Row', component: Row },
+  { name: 'Chip', component: Chip },
 ];
 
 // App creation and setup
