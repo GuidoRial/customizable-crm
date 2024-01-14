@@ -1,5 +1,5 @@
 <template>
-  <div class="create-blueprint">
+  <CreateLayout>
     <Title
       title="Create Blueprint"
       tooltipText="Feel lost? Click me."
@@ -8,7 +8,7 @@
     />
 
     <Steps :model="items" :active-step="active" />
-    <div class="card-container">
+    <StepsContainerVue>
       <Card class="card">
         <template #content>
           <BasicInfoStep v-if="active === 0" />
@@ -38,9 +38,9 @@
           </div>
         </template>
       </Card>
-    </div>
+    </StepsContainerVue>
     <Toast />
-  </div>
+  </CreateLayout>
 </template>
 
 <script lang="ts">
@@ -53,9 +53,19 @@ import { mapActions, mapState } from 'pinia';
 import useBlueprint from '@/store/blueprint';
 import { sleep } from '@/utils/sleep';
 import Title from '@/components/shared/Title.vue';
+import CreateLayout from '@/components/shared/CreateLayout.vue';
+import StepsContainerVue from '@/components/shared/StepsContainer.vue';
 export default defineComponent({
   name: 'blueprints-create',
-  components: { BasicInfoStep, FieldsStep, ReferenceStep, ReviewStep, Title },
+  components: {
+    StepsContainerVue,
+    BasicInfoStep,
+    FieldsStep,
+    ReferenceStep,
+    ReviewStep,
+    Title,
+    CreateLayout,
+  },
   data() {
     return {
       active: 0 as number,
@@ -65,8 +75,7 @@ export default defineComponent({
     ...mapActions(useBlueprint, ['createBlueprint']),
     async create() {
       try {
-        const res = await this.createBlueprint();
-        console.log({ res });
+        await this.createBlueprint();
 
         this.$toast.add({
           severity: 'info',
@@ -141,16 +150,6 @@ export default defineComponent({
 <style scoped>
 h2 {
   margin: 0;
-}
-
-.create-blueprint {
-  margin: 1rem;
-}
-
-.card-container {
-  margin-top: 2rem;
-  display: flex;
-  justify-content: center;
 }
 
 .card {

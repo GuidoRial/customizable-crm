@@ -1,5 +1,5 @@
 <template>
-  <div class="about-blueprints">
+  <CreateLayout>
     <div class="header">
       <h1>About blueprints</h1>
     </div>
@@ -51,14 +51,15 @@
       @click="$router.push({ name: 'blueprints-create' })"
       style="margin-top: 1rem"
     />
-  </div>
+  </CreateLayout>
 </template>
 
 <script lang="ts">
+import CreateLayout from '@/components/shared/CreateLayout.vue';
 import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'blueprints-about',
-  components: {},
+  components: { CreateLayout },
   data() {
     return {
       events: [
@@ -111,9 +112,6 @@ export default defineComponent({
 <style scoped>
 .description:nth-child(even) {
   text-align: left;
-}
-.about-blueprints {
-  margin: 1rem;
 }
 .header {
   display: flex;

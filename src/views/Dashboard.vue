@@ -104,6 +104,7 @@ export default defineComponent({
         {
           label: 'Workbench',
           icon: 'pi pi-wrench',
+          command: () => this.$router.push({ name: 'workbench' }),
         },
       ],
     };

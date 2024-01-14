@@ -1,5 +1,5 @@
 <template>
-  <div class="blueprints">
+  <CreateLayout>
     <Title title="My Blueprints" />
     <div class="card">
       <DataTable
@@ -31,13 +31,28 @@
         </Column>
         <Column header="Actions">
           <template #body="slotProps">
-            <Button
-              icon="pi pi-pencil"
-              class="p-button"
-              text
-              raised
-              @click="$router.push({ name: 'edit-blueprint', params: { id: slotProps.data._id } })"
-            />
+            <div class="button-group">
+              <Button
+                icon="pi pi-pencil"
+                class="p-button"
+                text
+                raised
+                @click="
+                  $router.push({ name: 'edit-blueprint', params: { id: slotProps.data._id } })
+                "
+              />
+              <Button icon="pi pi-trash" class="p-button-danger" text raised />
+
+              <Button
+                icon="pi pi-wrench"
+                class="p-button"
+                text
+                raised
+                @click="
+                  $router.push({ name: 'workbench', query: { blueprint: slotProps.data._id } })
+                "
+              />
+            </div>
           </template>
         </Column>
         <template #expansion="slotProps">
@@ -66,7 +81,7 @@
       </DataTable>
       <Toast />
     </div>
-  </div>
+  </CreateLayout>
 </template>
 
 <script lang="ts">
@@ -75,9 +90,10 @@ import useBlueprint from '@/store/blueprint';
 import { mapActions, mapState } from 'pinia';
 import { defineComponent } from 'vue';
 import { convert_to_normal_text } from '@/utils/textFormatters';
+import CreateLayout from '@/components/shared/CreateLayout.vue';
 export default defineComponent({
   name: 'blueprints-view',
-  components: { Title },
+  components: { Title, CreateLayout },
   computed: {
     ...mapState(useBlueprint, ['blueprints']),
   },
@@ -109,10 +125,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.blueprints {
-  margin: 1rem;
-}
-
 .checkbox-container {
   display: flex;
   justify-content: center;
@@ -122,6 +134,11 @@ export default defineComponent({
 .chips {
   display: flex;
   flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.button-group {
+  display: flex;
   gap: 0.5rem;
 }
 </style>

@@ -8,33 +8,35 @@ const useBlueprint = defineStore('blueprint', {
   // arrow function recommended for full type inference
   state: () => {
     return {
-      blueprints: [] as Blueprint[],
+      blueprints: [] as Blueprint[], // View all
       blueprint: {
         name: '',
         description: '',
-        metadata: { canBeReferenced: false, map: '' },
+        metadata: { canBeReferenced: false, map: '' }, // Workbench or create blueprint
       } as Blueprint,
       fields: [{ label: '', type: 'text', required: false, options: [''] }] as Field[],
     };
   },
   actions: {
+    setDefault() {
+      this.blueprint = {
+        name: '',
+        description: '',
+        metadata: { canBeReferenced: false, map: '' },
+      };
+      this.fields = [{ label: '', type: 'text', required: false, options: [''] }];
+    },
     async createBlueprint() {
       const loading = useLoading();
       const auth = useAuth();
       try {
         loading.updateLoading(true);
-        const blueprint = await blueprints.create({
+        await blueprints.create({
           blueprint: { ...this.blueprint, user: auth.user._id },
           fields: this.fields,
         });
 
-        console.log({ blueprint });
-        this.blueprint = {
-          name: '',
-          description: '',
-          metadata: { canBeReferenced: false, map: '' },
-        };
-        this.fields = [{ label: '', type: 'text', required: false, options: [''] }];
+        this.setDefault();
       } catch (e) {
         console.log({ e });
         throw e;
@@ -54,6 +56,31 @@ const useBlueprint = defineStore('blueprint', {
           },
         });
         this.blueprints = data;
+      } catch (e) {
+        console.log({ e });
+        throw e;
+      } finally {
+        loading.updateLoading(false);
+      }
+    },
+    async getBlueprint(id: string) {
+      const loading = useLoading();
+      const user = useAuth();
+      try {
+        loading.updateLoading(true);
+        const data = await blueprints.read({
+          id,
+          query: {
+            populate: JSON.stringify([{ path: 'fields' }]),
+          },
+        });
+
+        if (data.user !== user.user._id) {
+          throw new Error('You are not allowed to access this blueprint');
+        }
+
+        this.blueprint = data;
+        this.fields = data.fields;
       } catch (e) {
         console.log({ e });
         throw e;

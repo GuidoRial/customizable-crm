@@ -38,6 +38,9 @@ import Column from 'primevue/column';
 import ColumnGroup from 'primevue/columngroup'; // optional
 import Row from 'primevue/row'; // optional
 import Chip from 'primevue/chip';
+import InputNumber from 'primevue/inputnumber';
+import RadioButton from 'primevue/radiobutton';
+import Calendar from 'primevue/calendar';
 
 // Pinia setup
 const pinia = createPinia();
@@ -73,6 +76,9 @@ const components = [
   { name: 'ColumnGroup', component: ColumnGroup },
   { name: 'Row', component: Row },
   { name: 'Chip', component: Chip },
+  { name: 'InputNumber', component: InputNumber },
+  { name: 'RadioButton', component: RadioButton },
+  { name: 'Calendar', component: Calendar },
 ];
 
 // App creation and setup

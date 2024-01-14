@@ -2,6 +2,37 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import useAuth from '@/store/auth';
 
+const blueprintRoutes = [
+  {
+    name: 'blueprints',
+    path: 'blueprints',
+    component: () => import('@/views/Blueprints/Blueprints.vue'),
+  },
+  {
+    name: 'blueprints-create',
+    path: 'create',
+    component: () => import('@/views/Blueprints/CreateBlueprint.vue'),
+  },
+  {
+    name: 'blueprints-about',
+    path: 'about',
+    component: () => import('@/views/Blueprints/AboutBlueprints.vue'),
+  },
+  {
+    name: 'edit-blueprint',
+    path: 'edit/:id',
+    component: () => import('@/views/Blueprints/EditBlueprint.vue'),
+  },
+];
+
+const workbenchRoutes = [
+  {
+    name: 'workbench',
+    path: 'workbench',
+    component: () => import('@/views/Workbench/Workbench.vue'),
+  },
+];
+
 const routes: Array<RouteRecordRaw> = [
   {
     name: 'app',
@@ -12,6 +43,9 @@ const routes: Array<RouteRecordRaw> = [
         name: 'home',
         path: '',
         component: HomeView,
+        beforeEnter: () => {
+          return { name: 'blueprints' };
+        },
       },
       {
         name: 'login',
@@ -45,28 +79,7 @@ const routes: Array<RouteRecordRaw> = [
             return { name: 'login' };
           }
         },
-        children: [
-          {
-            name: 'blueprints',
-            path: 'blueprints',
-            component: () => import('@/views/Blueprints/Blueprints.vue'),
-          },
-          {
-            name: 'blueprints-create',
-            path: 'create',
-            component: () => import('@/views/Blueprints/CreateBlueprint.vue'),
-          },
-          {
-            name: 'blueprints-about',
-            path: 'about',
-            component: () => import('@/views/Blueprints/AboutBlueprints.vue'),
-          },
-          {
-            name: 'edit-blueprint',
-            path: 'edit/:id',
-            component: () => import('@/views/Blueprints/EditBlueprint.vue'),
-          },
-        ],
+        children: [...blueprintRoutes, ...workbenchRoutes],
       },
     ],
   },
