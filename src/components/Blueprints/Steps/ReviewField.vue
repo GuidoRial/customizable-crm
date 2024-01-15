@@ -10,6 +10,9 @@
         tooltipText="This field will be used as a reference."
       />
     </div>
+    <p style="text-align: left" v-if="field?.description?.length">
+      You described this field as: "{{ field.description }}"
+    </p>
     <FieldDescription
       :tooltipText="getTooltipTextBasedOnFieldType(field.type)"
       :label="'Field type: ' + field.type"

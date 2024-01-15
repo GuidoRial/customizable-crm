@@ -1,7 +1,12 @@
 <template>
   <div class="field-description">
-    <InfoIcon :tooltipText="tooltipText" />
-    <p>{{ label }}</p>
+    <InfoIcon
+      v-if="tooltipText?.length"
+      :tooltipText="`${required ? 'This field is required. ' : ''}${tooltipText}`"
+    />
+    <p>
+      {{ label }} <span v-if="required" style="color: var(--primary-color)">{{ ' *' }}</span>
+    </p>
   </div>
 </template>
 
@@ -13,11 +18,14 @@ export default {
   props: {
     tooltipText: {
       type: String,
-      required: true,
     },
     label: {
       type: String,
       required: true,
+    },
+    required: {
+      type: Boolean,
+      default: false,
     },
   },
   components: { InfoIcon },
@@ -32,6 +40,6 @@ export default {
   gap: 0.5rem;
   height: 1.5rem;
   padding: 1rem 0;
-  margin: 0.5rem 0rem;
+  margin-top: 1rem;
 }
 </style>

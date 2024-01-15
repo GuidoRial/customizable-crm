@@ -77,6 +77,15 @@ export default defineComponent({
       try {
         await this.createBlueprint();
 
+
+      } catch (e: any) {
+        this.$toast.add({
+          severity: 'error',
+          summary: e.message,
+          detail: e.response.data.message,
+          life: 3000,
+        });
+      } finally{
         this.$toast.add({
           severity: 'info',
           summary: 'Confirmed',
@@ -85,13 +94,6 @@ export default defineComponent({
         });
         await sleep(3000);
         this.$router.push({ name: 'blueprints' });
-      } catch (e: any) {
-        this.$toast.add({
-          severity: 'error',
-          summary: e.message,
-          detail: e.response.data.message,
-          life: 3000,
-        });
       }
     },
   },
@@ -119,6 +121,7 @@ export default defineComponent({
       return base;
     },
     nextBtnDisabled(): boolean {
+      // Validate that two labels do not exist with the same name otherwise keys will colide
       switch (this.active) {
         case 0:
           return this.blueprint.name === '';
@@ -127,6 +130,7 @@ export default defineComponent({
             if (field.label === '') return true;
 
             if (field.type === 'select' || field.type === 'radio') {
+              if (field.options?.length < 2) return true;
               if (field.options?.some((option) => option === '')) return true;
             }
           }

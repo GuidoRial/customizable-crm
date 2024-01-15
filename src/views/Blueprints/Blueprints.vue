@@ -59,7 +59,8 @@
           <div class="p-3">
             <h5>Fields</h5>
             <DataTable :value="slotProps.data.fields">
-              <Column field="label" header="Name" sortable></Column>
+              <Column field="label" header="Name" sortable></Column
+              ><Column field="description" header="Description"></Column>
               <Column header="Required?">
                 <template #body="slotProps">
                   <div class="checkbox-container">
@@ -100,7 +101,6 @@ export default defineComponent({
   methods: {
     ...mapActions(useBlueprint, ['getBlueprints']),
     convert_to_normal_text,
-
     expandAll() {
       this.expandedRows = this.blueprints.reduce((acc: any, p: any) => {
         acc[p._id] = true;

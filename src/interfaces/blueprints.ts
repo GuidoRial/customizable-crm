@@ -14,4 +14,6 @@ export interface Field {
   type: 'text' | 'select' | 'number' | 'checkbox' | 'radio' | 'textarea' | 'date' /*'reference';*/; // Reference will have to wait
   required: boolean;
   options: string[];
+  key?: string;
+  description?: string;
 }

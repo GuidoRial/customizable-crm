@@ -14,7 +14,9 @@ const useBlueprint = defineStore('blueprint', {
         description: '',
         metadata: { canBeReferenced: false, map: '' }, // Workbench or create blueprint
       } as Blueprint,
-      fields: [{ label: '', type: 'text', required: false, options: [''] }] as Field[],
+      fields: [
+        { label: '', type: 'text', required: false, options: [''], description: '' },
+      ] as Field[],
     };
   },
   actions: {
@@ -74,10 +76,6 @@ const useBlueprint = defineStore('blueprint', {
             populate: JSON.stringify([{ path: 'fields' }]),
           },
         });
-
-        if (data.user !== user.user._id) {
-          throw new Error('You are not allowed to access this blueprint');
-        }
 
         this.blueprint = data;
         this.fields = data.fields;

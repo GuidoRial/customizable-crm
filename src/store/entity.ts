@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia';
 import _ from 'lodash';
 import { Entity } from '@/interfaces/entities';
+import entities from '@/services/entities';
+import useAuth from './auth';
 const useEntity = defineStore('entity', {
   // arrow function recommended for full type inference
   state: () => {
@@ -11,6 +13,11 @@ const useEntity = defineStore('entity', {
     };
   },
   actions: {
+    async createEntity() {
+      const user = useAuth();
+      await entities.create({ ...this.entity, user: user.user._id });
+      this.setDefault();
+    },
     setDefault() {
       this.entity = {};
     },

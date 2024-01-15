@@ -26,42 +26,76 @@
 
           <div v-else-if="active == 1">
             <div v-for="(field, i) in fields" :key="i">
+              <FieldDescription
+                :tooltipText="field?.description ? field.description : ''"
+                :label="field.label"
+                :required="field.required"
+              />
               <InputGroup style="margin-top: 1rem" v-if="field.type === 'text'">
-                <InputText :label="field.label" :placeholder="field.label" />
+                <InputText
+                  :label="field.label"
+                  :placeholder="field.label"
+                  v-model="entity[field.key as keyof typeof entity]"
+                />
               </InputGroup>
               <InputGroup style="margin-top: 1rem" v-if="field.type === 'number'">
-                <InputNumber :label="field.label" :placeholder="field.label" />
+                <InputNumber
+                  v-model="entity[field.key as keyof typeof entity]"
+                  :label="field.label"
+                  :placeholder="field.label"
+                />
               </InputGroup>
               <InputGroup style="margin-top: 1rem" v-if="field.type === 'textarea'">
-                <Textarea :label="field.label" :placeholder="field.label" />
+                <Textarea
+                  v-model="entity[field.key as keyof typeof entity]"
+                  :label="field.label"
+                  :placeholder="field.label"
+                />
               </InputGroup>
               <InputGroup style="margin-top: 1rem" v-if="field.type === 'select'">
                 <Dropdown
+                  v-model="entity[field.key as keyof typeof entity]"
                   :label="field.label"
                   :placeholder="field.label"
                   :options="field.options"
                 />
               </InputGroup>
               <div style="margin-top: 1rem" class="checkbox" v-if="field.type === 'checkbox'">
-                <Checkbox :label="field.label" :placeholder="field.label" :binary="true" />
+                <Checkbox
+                  v-model="entity[field.key as keyof typeof entity]"
+                  :inputId="`checkbox-${i}`"
+                  :label="field.label"
+                  :placeholder="field.label"
+                  :binary="true"
+                />
+                <label :for="`checkbox-${i}`">{{ field.label }}</label>
               </div>
 
-              <div class="checkbox" v-if="field.type === 'radio'">
+              <div class="radio" v-if="field.type === 'radio'">
                 <div>
                   <p>{{ field.label }}</p>
                   <div
                     v-for="(option, index) in field.options"
                     :key="index"
-                    class="checkbox"
+                    class="radio"
                     style="margin-top: 1rem"
                   >
-                    <RadioButton inputId="ingredient1" :value="option" />
+                    <RadioButton
+                      v-model="entity[field.key as keyof typeof entity]"
+                      inputId="ingredient1"
+                      :value="option"
+                    />
                     <label for="ingredient1" style="margin-left: 0.5rem">{{ option }}</label>
                   </div>
                 </div>
               </div>
               <InputGroup style="margin-top: 1rem" v-if="field.type === 'date'">
-                <Calendar showIcon :label="field.label" />
+                <Calendar
+                  v-model="entity[field.key as keyof typeof entity]"
+                  :placeholder="field.label"
+                  showIcon
+                  :label="field.label"
+                />
               </InputGroup>
             </div>
           </div>
@@ -82,18 +116,22 @@
               v-if="active < items.length - 1"
               label="Next Step"
               type="submit"
+              :disabled="nextBtnDisabled"
               @click="active += 1"
             />
             <Button
               v-if="active === items.length - 1"
               class="p-button p-button-success"
-              label="Create Blueprint"
+              label="Create Entity"
+              :disabled="createBtnDisabled"
               type="button"
+              @click="create"
             />
           </div>
         </template>
       </Card>
     </StepsContainerVue>
+    <Toast />
   </CreateLayout>
 </template>
 
@@ -106,8 +144,8 @@ import { mapActions, mapState } from 'pinia';
 import { defineComponent } from 'vue';
 import StepsContainerVue from '@/components/shared/StepsContainer.vue';
 import useEntity from '@/store/entity';
-// If I have a parameter with a blueprint_id then I can use that one, otherwise I can
-// get a dropdown to select the right one
+import FieldDescription from '@/components/Blueprints/Steps/FieldDescription.vue';
+import { sleep } from '@/utils/sleep';
 
 export default defineComponent({
   name: 'workbench-view',
@@ -129,22 +167,25 @@ export default defineComponent({
         {
           label: 'Input data',
         },
-        {
-          label: 'Review',
-        },
       ];
 
       return base;
     },
+    createBtnDisabled(): boolean {
+      const requiredKeys = this.blueprint.fields?.filter((f) => f.required).map((f) => f.key) ?? [];
+
+      for (let key of requiredKeys) {
+        if (!this.entity[key as keyof typeof this.entity]) {
+          return true;
+        }
+      }
+
+      return false;
+    },
     nextBtnDisabled(): boolean {
       switch (this.active) {
         case 0:
-          return this.blueprint.name === '';
-        case 1:
-          return true;
-        case 2:
-          return true;
-
+          return this.entity.blueprint == '';
         default:
           return true;
       }
@@ -152,9 +193,31 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(useBlueprint, ['getBlueprint', 'setDefault', 'getBlueprints']),
+    ...mapActions(useEntity, ['createEntity']),
+    async create() {
+      try {
+        await this.createEntity();
+      } catch (error: any) {
+        this.$toast.add({
+          severity: 'error',
+          summary: error.message,
+          detail: error.response.data.message,
+          life: 3000,
+        });
+      } finally {
+        await sleep(3000);
+        this.$toast.add({
+          severity: 'info',
+          summary: 'Confirmed',
+          detail: 'Entity created successfully. Redirecting you to your blueprints page',
+          life: 3000,
+        });
+        this.$router.push({ name: 'blueprints' });
+      }
+    },
   },
 
-  components: { CreateLayout, Title, StepsContainerVue },
+  components: { CreateLayout, Title, StepsContainerVue, FieldDescription },
 
   async created() {
     if (this.$route.query.blueprint) {
@@ -193,8 +256,16 @@ export default defineComponent({
   gap: 1rem;
 }
 
+.radio {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .checkbox {
   display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   justify-content: center;
   align-items: center;
 }

@@ -73,6 +73,14 @@
         <label for="required">Required?</label>
       </div>
 
+      <div
+        style="margin-top: 1rem"
+        class="checkbox"
+        v-tooltip.top="'Describe this field in more detail'"
+      >
+        <InputGroup> <Textarea v-model="field.description" placeholder="Description" /></InputGroup>
+      </div>
+
       <div class="button-group">
         <Button
           :disabled="i === 0 && fields.length === 1"

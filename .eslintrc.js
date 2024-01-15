@@ -17,6 +17,7 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     'no-useless-escape': 'off',
     'vue/no-mutating-props': 'off',
+    'no-case-declarations': 'warn',
     'prettier/prettier': 'warn',
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
