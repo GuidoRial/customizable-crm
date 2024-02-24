@@ -4,7 +4,8 @@
       title="Workbench"
       tooltipText="Feel lost? Click me."
       to="blueprints-about"
-      action="redirect" />
+      action="redirect"
+    />
 
     <Steps :model="items" :active-step="active" />
 
@@ -18,16 +19,19 @@
                 optionLabel="label"
                 optionValue="value"
                 v-model="entity.blueprint"
-                :options="blueprints.map((b: Blueprint) => ({ label: b.name, value: b._id }))" />
+                :options="blueprints.map((b: Blueprint) => ({ label: b.name, value: b._id }))"
+              />
             </InputGroup>
           </div>
 
           <div v-else-if="active == 1">
             <div v-for="(field, i) in fields" :key="i">
-              <FieldDescription v-if="field.type != 'checkbox'"
+              <FieldDescription
+                v-if="field.type != 'checkbox'"
                 :tooltipText="field?.description ? field.description : ''"
                 :label="field.label"
-                :required="field.required" />
+                :required="field.required"
+              />
               <EntityInput :field="field" />
             </div>
           </div>
@@ -42,20 +46,23 @@
               @click="active -= 1"
               :disabled="
                 !!(active === 1 && $route.query.blueprint && $route.query.blueprint.length)
-              " />
+              "
+            />
             <Button
               v-if="active < items.length - 1"
               label="Next Step"
               type="submit"
               :disabled="nextBtnDisabled"
-              @click="active += 1" />
+              @click="active += 1"
+            />
             <Button
               v-if="active === items.length - 1"
               class="p-button p-button-success"
               label="Create Entity"
               :disabled="createBtnDisabled"
               type="button"
-              @click="create" />
+              @click="create"
+            />
           </div>
         </template>
       </Card>
@@ -75,7 +82,7 @@ import StepsContainerVue from '@/components/shared/StepsContainer.vue';
 import useEntity from '@/store/entity';
 import FieldDescription from '@/components/Blueprints/Steps/FieldDescription.vue';
 import { sleep } from '@/utils/sleep';
-import EntityInput from '@/components/Entities/EntityInput.vue'
+import EntityInput from '@/components/Entities/EntityInput.vue';
 
 export default defineComponent({
   name: 'workbench-view',

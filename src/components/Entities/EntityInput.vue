@@ -1,18 +1,11 @@
 <template>
   <div class="radio" v-if="field.type === 'radio'">
-    <div>
-      <p>{{ field.label }}</p>
-      <div
-        v-for="(option, index) in field.options"
-        :key="index"
-        class="radio"
-        style="margin-top: 1rem">
-        <RadioButton
-          v-model="entity[field.key as keyof typeof entity]"
-          inputId="ingredient1"
-          :value="option" />
-        <label for="ingredient1" style="margin-left: 0.5rem">{{ option }}</label>
-      </div>
+    <div v-for="(option, index) in field.options" :key="index" style="margin-top: 1rem">
+      <RadioButton
+        v-model="entity[field.key as keyof typeof entity]"
+        inputId="ingredient1"
+        :value="option" />
+      <label for="ingredient1" style="margin-left: 0.5rem">{{ option }}</label>
     </div>
   </div>
   <div style="margin-top: 1rem" class="checkbox" v-else-if="field.type === 'checkbox'">
@@ -22,8 +15,8 @@
       :label="field.label"
       :placeholder="field.label"
       :binary="true" />
-    <label :for="`checkbox-${i}`">{{ field.label }} <span v-if="field.required"
-        style="color: var(--primary-color)">{{ ' *' }}</span></label>
+    <label :for="`checkbox-${i}`">{{ field.label }}
+      <span v-if="field.required" style="color: var(--primary-color)">{{ ' *' }}</span></label>
   </div>
   <InputGroup style="margin-top: 1rem" v-else-if="field.type === 'date'">
     <Calendar
@@ -60,28 +53,29 @@
 </template>
 
 <script lang="ts">
-import { mapState } from 'pinia'
+import { mapState } from 'pinia';
 import useEntity from '@/store/entity';
 export default {
   name: 'entity-input',
   props: {
-    field: Object
+    field: Object,
   },
   computed: {
     ...mapState(useEntity, ['entity']),
   },
-}
+};
 </script>
 <style scoped>
 .radio {
   display: flex;
-  justify-content: center;
+  gap: 0.5rem;
   align-items: center;
+  justify-content: space-around;
 }
 
 .checkbox {
   display: flex;
-  gap: .5rem;
+  gap: 0.5rem;
   margin-top: 1rem;
 }
 </style>

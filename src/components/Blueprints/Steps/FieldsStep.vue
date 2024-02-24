@@ -10,7 +10,8 @@
         tooltipText="
           Used to identify this field within your blueprint. i.e: Full Name, Address, Contry
         "
-        label="Field Name:" />
+        label="Field Name:"
+      />
       <InputGroup>
         <InputText placeholder="Field Name (i.e: Contact Name)" v-model="field.label" />
       </InputGroup>
@@ -19,7 +20,8 @@
         tooltipText="
         Used to describe how you want to input this data, do you want two write down a name or mark a checkbox for this field
         "
-        label="Field Type:" />
+        label="Field Type:"
+      />
 
       <InputGroup>
         <Dropdown
@@ -35,33 +37,39 @@
             { label: 'Textarea', value: 'textarea' },
             { label: 'Date', value: 'date' },
           ]"
-          v-model="field.type" />
+          v-model="field.type"
+        />
       </InputGroup>
       <div style="margin-top: 1rem" v-if="field.type === 'select' || field.type === 'radio'">
         <FieldDescription
           tooltipText="Select and radio field types require possible values for it to work"
-          :label="'Posible values for field: ' + field.label" />
+          :label="'Posible values for field: ' + field.label"
+        />
 
         <InputGroup v-for="(option, index) in field.options" :key="index" style="margin-top: 1rem">
           <InputText
             :placeholder="`Possible value for field: ${field.label}`"
-            v-model="field.options[index]" />
+            v-model="field.options[index]"
+          />
           <Button
             icon="pi pi-minus"
             severity="danger"
             @click="field.options?.pop()"
-            :disabled="index !== field.options.length - 1 || index === 0" />
+            :disabled="index !== field.options.length - 1 || index === 0"
+          />
           <Button
             icon="pi pi-plus"
             severity="success"
             @click="field.options?.push('')"
-            :disabled="index !== field.options.length - 1 || !field.options[index].length" />
+            :disabled="index !== field.options.length - 1 || !field.options[index].length"
+          />
         </InputGroup>
       </div>
       <div
         style="margin-top: 1rem"
         class="checkbox"
-        v-tooltip.top="'When you use this blueprint, will this field be required?'">
+        v-tooltip.top="'When you use this blueprint, will this field be required?'"
+      >
         <Checkbox inputId="required" name="category" :binary="true" v-model="field.required" />
         <label for="required">Required?</label>
       </div>
@@ -69,7 +77,8 @@
       <div
         style="margin-top: 1rem"
         class="checkbox"
-        v-tooltip.top="'Describe this field in more detail'">
+        v-tooltip.top="'Describe this field in more detail'"
+      >
         <InputGroup> <Textarea v-model="field.description" placeholder="Description" /></InputGroup>
       </div>
 
@@ -79,14 +88,16 @@
           label="Delete Field"
           type="button"
           class="p-button-danger"
-          @click="fields.splice(i, 1)" />
+          @click="fields.splice(i, 1)"
+        />
         <Button
           v-if="i === fields.length - 1"
           :disabled="addFieldBtnDisabled(fields, i)"
           label="Add Field"
           type="button"
           class="p-button-success"
-          @click="addField(fields)" />
+          @click="addField(fields)"
+        />
       </div>
 
       <Divider />
