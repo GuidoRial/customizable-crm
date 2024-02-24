@@ -4,8 +4,7 @@
       title="Workbench"
       tooltipText="Feel lost? Click me."
       to="blueprints-about"
-      action="redirect"
-    />
+      action="redirect" />
 
     <Steps :model="items" :active-step="active" />
 
@@ -19,84 +18,17 @@
                 optionLabel="label"
                 optionValue="value"
                 v-model="entity.blueprint"
-                :options="blueprints.map((b: Blueprint) => ({ label: b.name, value: b._id }))"
-              />
+                :options="blueprints.map((b: Blueprint) => ({ label: b.name, value: b._id }))" />
             </InputGroup>
           </div>
 
           <div v-else-if="active == 1">
             <div v-for="(field, i) in fields" :key="i">
-              <FieldDescription
+              <FieldDescription v-if="field.type != 'checkbox'"
                 :tooltipText="field?.description ? field.description : ''"
                 :label="field.label"
-                :required="field.required"
-              />
-              <InputGroup style="margin-top: 1rem" v-if="field.type === 'text'">
-                <InputText
-                  :label="field.label"
-                  :placeholder="field.label"
-                  v-model="entity[field.key as keyof typeof entity]"
-                />
-              </InputGroup>
-              <InputGroup style="margin-top: 1rem" v-if="field.type === 'number'">
-                <InputNumber
-                  v-model="entity[field.key as keyof typeof entity]"
-                  :label="field.label"
-                  :placeholder="field.label"
-                />
-              </InputGroup>
-              <InputGroup style="margin-top: 1rem" v-if="field.type === 'textarea'">
-                <Textarea
-                  v-model="entity[field.key as keyof typeof entity]"
-                  :label="field.label"
-                  :placeholder="field.label"
-                />
-              </InputGroup>
-              <InputGroup style="margin-top: 1rem" v-if="field.type === 'select'">
-                <Dropdown
-                  v-model="entity[field.key as keyof typeof entity]"
-                  :label="field.label"
-                  :placeholder="field.label"
-                  :options="field.options"
-                />
-              </InputGroup>
-              <div style="margin-top: 1rem" class="checkbox" v-if="field.type === 'checkbox'">
-                <Checkbox
-                  v-model="entity[field.key as keyof typeof entity]"
-                  :inputId="`checkbox-${i}`"
-                  :label="field.label"
-                  :placeholder="field.label"
-                  :binary="true"
-                />
-                <label :for="`checkbox-${i}`">{{ field.label }}</label>
-              </div>
-
-              <div class="radio" v-if="field.type === 'radio'">
-                <div>
-                  <p>{{ field.label }}</p>
-                  <div
-                    v-for="(option, index) in field.options"
-                    :key="index"
-                    class="radio"
-                    style="margin-top: 1rem"
-                  >
-                    <RadioButton
-                      v-model="entity[field.key as keyof typeof entity]"
-                      inputId="ingredient1"
-                      :value="option"
-                    />
-                    <label for="ingredient1" style="margin-left: 0.5rem">{{ option }}</label>
-                  </div>
-                </div>
-              </div>
-              <InputGroup style="margin-top: 1rem" v-if="field.type === 'date'">
-                <Calendar
-                  v-model="entity[field.key as keyof typeof entity]"
-                  :placeholder="field.label"
-                  showIcon
-                  :label="field.label"
-                />
-              </InputGroup>
+                :required="field.required" />
+              <EntityInput :field="field" />
             </div>
           </div>
         </template>
@@ -110,23 +42,20 @@
               @click="active -= 1"
               :disabled="
                 !!(active === 1 && $route.query.blueprint && $route.query.blueprint.length)
-              "
-            />
+              " />
             <Button
               v-if="active < items.length - 1"
               label="Next Step"
               type="submit"
               :disabled="nextBtnDisabled"
-              @click="active += 1"
-            />
+              @click="active += 1" />
             <Button
               v-if="active === items.length - 1"
               class="p-button p-button-success"
               label="Create Entity"
               :disabled="createBtnDisabled"
               type="button"
-              @click="create"
-            />
+              @click="create" />
           </div>
         </template>
       </Card>
@@ -146,6 +75,7 @@ import StepsContainerVue from '@/components/shared/StepsContainer.vue';
 import useEntity from '@/store/entity';
 import FieldDescription from '@/components/Blueprints/Steps/FieldDescription.vue';
 import { sleep } from '@/utils/sleep';
+import EntityInput from '@/components/Entities/EntityInput.vue'
 
 export default defineComponent({
   name: 'workbench-view',
@@ -217,7 +147,7 @@ export default defineComponent({
     },
   },
 
-  components: { CreateLayout, Title, StepsContainerVue, FieldDescription },
+  components: { CreateLayout, Title, StepsContainerVue, FieldDescription, EntityInput },
 
   async created() {
     if (this.$route.query.blueprint) {
@@ -250,23 +180,10 @@ export default defineComponent({
   width: 50rem;
   height: auto;
 }
+
 .footer {
   display: flex;
   justify-content: center;
   gap: 1rem;
-}
-
-.radio {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.checkbox {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  justify-content: center;
-  align-items: center;
 }
 </style>

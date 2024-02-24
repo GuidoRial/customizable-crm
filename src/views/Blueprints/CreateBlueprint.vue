@@ -76,8 +76,6 @@ export default defineComponent({
     async create() {
       try {
         await this.createBlueprint();
-
-
       } catch (e: any) {
         this.$toast.add({
           severity: 'error',
@@ -85,7 +83,7 @@ export default defineComponent({
           detail: e.response.data.message,
           life: 3000,
         });
-      } finally{
+      } finally {
         this.$toast.add({
           severity: 'info',
           summary: 'Confirmed',

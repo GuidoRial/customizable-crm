@@ -35,8 +35,8 @@ import Timeline from 'primevue/timeline';
 import Panel from 'primevue/panel';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import ColumnGroup from 'primevue/columngroup'; // optional
-import Row from 'primevue/row'; // optional
+import ColumnGroup from 'primevue/columngroup';
+import Row from 'primevue/row';
 import Chip from 'primevue/chip';
 import InputNumber from 'primevue/inputnumber';
 import RadioButton from 'primevue/radiobutton';
